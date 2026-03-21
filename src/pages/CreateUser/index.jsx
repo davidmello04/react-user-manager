@@ -1,11 +1,11 @@
 import { useState } from "react";
-
+import { api } from "../../services/api";
 
 function CreateUser() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault(); //Impede o comportamento padrão do formulário de recarregar a página
 
         const newUser = {
@@ -13,7 +13,15 @@ function CreateUser() {
             email
         };
 
-        console.log(newUser);
+        try {
+            await api.post("/users", newUser);
+            console.log("User created successfully!");
+
+            setName("");
+            setEmail("");
+        } catch (error) {
+            console.error("Error creating user:", error);
+        }
     };
 
     return (
