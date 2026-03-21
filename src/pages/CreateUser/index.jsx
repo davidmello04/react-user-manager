@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function CreateUser() {
     const [name, setName] = useState("");
@@ -13,7 +14,7 @@ function CreateUser() {
         e.preventDefault(); //Impede o comportamento padrão do formulário de recarregar a página
 
         if (!name.trim() || !email.trim()) {
-            alert("Please fill in all fields.");
+            toast.error("Please fill in all fields.");
             return;
         }
 
@@ -26,14 +27,14 @@ function CreateUser() {
 
         try {
             await api.post("/users", newUser);
-            console.log("User created successfully!");
+            toast.success("User created successfully!");
             
             setName("");
             setEmail("");
             
             navigate("/?refresh=true");
         } catch (error) {
-            console.error("Error creating user:", error);
+            toast.error("Failed to create user. Please try again.");
         } finally {
             setLoading(false);
         }
