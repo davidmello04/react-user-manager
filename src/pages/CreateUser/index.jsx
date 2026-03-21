@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { api } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 function CreateUser() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault(); //Impede o comportamento padrão do formulário de recarregar a página
@@ -15,6 +18,7 @@ function CreateUser() {
 
         try {
             await api.post("/users", newUser);
+            navigate("/")
             console.log("User created successfully!");
 
             setName("");
