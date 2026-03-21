@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/useUserStore";
 import toast from "react-hot-toast";
 
 function CreateUser() {
@@ -9,6 +10,7 @@ function CreateUser() {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+    const { fetchUsers } = useUserStore();
 
     const handleSubmit = async (e) => {
         e.preventDefault(); //Impede o comportamento padrão do formulário de recarregar a página
@@ -27,12 +29,13 @@ function CreateUser() {
 
         try {
             await api.post("/users", newUser);
+            await fetchUsers(); // Atualiza a lista global de usuários após criar um novo usuário
             toast.success("User created successfully!");
             
             setName("");
             setEmail("");
             
-            navigate("/?refresh=true");
+            navigate("/");
         } catch (error) {
             toast.error("Failed to create user. Please try again.");
         } finally {

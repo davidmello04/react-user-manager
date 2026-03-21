@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <>
+      <Toaster />
       <Routes>
         {routes.map((route, index) => (
           <Route
@@ -14,7 +15,6 @@ function App() {
           />
         ))}
       </Routes>
-      <Toaster />
     </>
   );
 }
