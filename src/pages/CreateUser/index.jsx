@@ -31,7 +31,7 @@ function CreateUser() {
             setName("");
             setEmail("");
             
-            navigate("/")
+            navigate("/?refresh=true");
         } catch (error) {
             console.error("Error creating user:", error);
         } finally {

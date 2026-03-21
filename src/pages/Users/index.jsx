@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { api } from "../../services/api";
 import { Link } from "react-router-dom";
 import UserCard from "../../components/UserCard";
@@ -8,20 +9,22 @@ function Users() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        async function loadUsers() {
-            try {
-                const response = await api.get('/users');
-                setUsers(response.data); 
-            } catch (error) {
-                setError('Failed to load users');
-            } finally {
-                setLoading(false);
-            }
-        }
+    const location = useLocation();
 
+    const loadUsers = async () => {
+        try {
+            const response = await api.get('/users');
+            setUsers(response.data);
+        } catch (error) {
+            setError('Failed to load users');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         loadUsers();
-    }, []);
+    }, [location.search]);
 
     return (
         <div>
