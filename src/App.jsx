@@ -1,12 +1,16 @@
 import { Routes, Route } from "react-router-dom";
-import Users from "./pages/Users";
-import CreateUser from "./pages/CreateUser";
+import { routes } from "./routes";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Users />} />
-      <Route path="/create" element={<CreateUser />} />
+      {routes.map((route, index) => (
+        <Route
+          key={index}
+          path={route.path}
+          element={route.element}
+        />
+      ))}
     </Routes>
   );
 }
