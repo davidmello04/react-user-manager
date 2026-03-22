@@ -1,23 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../../store/useUserStore";
 import UserCard from "../../components/UserCard";
 
 
 function Users() {
-    const { users, loading, fetchUsers } = useUserStore();
-    const [error, setError] = useState(null);
+    const { users, loading, error, fetchUsers } = useUserStore();
 
     useEffect(() => {
-        const loadUsers = async () => {
-            try {
-                await fetchUsers();
-            } catch (error) {
-                setError("Failed to load users. Please try again.");
-            }
-        };
-
-        loadUsers();
+        fetchUsers();
     }, []);
 
     return (
