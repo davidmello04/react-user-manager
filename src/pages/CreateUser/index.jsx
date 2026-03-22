@@ -6,31 +6,34 @@ import toast from "react-hot-toast";
 function CreateUser() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [phone, setPhone] = useState("");
+    const [company, setCompany] = useState("");
 
     const navigate = useNavigate();
-    const { createUser } = useUserStore();
+    const { createUser, creatingUser } = useUserStore();
 
     const handleSubmit = async (e) => {
         e.preventDefault(); //Impede o comportamento padrão do formulário de recarregar a página
 
-        if (!name.trim() || !email.trim()) {
+        if (!name.trim() || !email.trim() || !phone.trim() || !company.trim()) {
             toast.error("Please fill in all fields.");
             return;
         }
 
         const newUser = {
             name,
-            email
+            email,
+            phone,
+            company: {
+                name: company
+            }
         };
-        
-        setLoading(true);
 
         try {
-            const success = await createUser(newUser);
+            const result = await createUser(newUser);
 
-            if (!success) {
-                toast.error("Failed to create user. Please try again.");
+            if (!result.success) {
+                toast.error(result?.message);
                 return;
             } else {
                 toast.success("User created successfully!");
@@ -38,12 +41,12 @@ function CreateUser() {
             
             setName("");
             setEmail("");
+            setPhone("");
+            setCompany("");
             
             navigate("/");
         } catch (error) {
             toast.error("Failed to create user. Please try again.");
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -53,20 +56,34 @@ function CreateUser() {
             <form onSubmit={handleSubmit}>
                 <input
                     placeholder="Name"
-                    disabled={loading}
+                    disabled={creatingUser}
                     value={name}  
                     onChange={(e) => setName(e.target.value)}
                 />
 
                 <input
                     placeholder="Email"
-                    disabled={loading}
+                    disabled={creatingUser}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
 
-                <button type="submit" disabled={loading}>
-                    {loading ? "Creating..." : "Create"}
+                <input
+                    placeholder="Phone"
+                    disabled={creatingUser}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                />
+
+                <input
+                    placeholder="Company Name"
+                    disabled={creatingUser}
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                />
+
+                <button type="submit" disabled={creatingUser}>
+                    {creatingUser ? "Creating..." : "Create"}
                 </button>
             </form>
         </div>
