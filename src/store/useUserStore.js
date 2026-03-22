@@ -4,15 +4,16 @@ import { api } from "../services/api";
 export const useUserStore = create((set) => ({
     users: [],
     loading: false,
+    error: null,
 
     fetchUsers: async () => {
         set({ loading: true });
 
         try {
             const response = await api.get("/users");
-            set({ users: response.data });
+            set({ users: response.data, error: null });
         } catch (error) {
-            console.error("Failed to fetch users:", error);
+            set({ error: "Failed to fetch users. Please try again." });
         } finally {
             set({ loading: false });
         }
