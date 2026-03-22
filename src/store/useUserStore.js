@@ -21,12 +21,12 @@ export const useUserStore = create((set) => ({
 
     createUser: async (newUser) => {
         try {
-            await api.post("/users", newUser);
+            const response = await api.post("/users", newUser);
 
-            //Atualiza a lista automaticamente
-            const response = await api.get("/users");
-            set({ users: response.data, error: null });
-
+            set((state) => ({
+                users: [...state.users, response.data],
+                error: null
+            }));
             return true;
         } catch (error) {
             set({ error: "Failed to create user. Please try again." });
