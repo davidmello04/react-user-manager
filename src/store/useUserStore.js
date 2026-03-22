@@ -17,5 +17,20 @@ export const useUserStore = create((set) => ({
         } finally {
             set({ loading: false });
         }
+    },
+
+    createUser: async (newUser) => {
+        try {
+            await api.post("/users", newUser);
+
+            //Atualiza a lista automaticamente
+            const response = await api.get("/users");
+            set({ users: response.data, error: null });
+
+            return true;
+        } catch (error) {
+            set({ error: "Failed to create user. Please try again." });
+            return false;
+        }
     }
 }));
